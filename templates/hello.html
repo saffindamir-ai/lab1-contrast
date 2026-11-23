@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Изменение контраста изображения</h1>
+{% if message %}
+<div class="alert alert-warning">{{ message }}</div>
+{% endif %}
+<p>Лабораторная работа № 1, вариант 2. Загрузите картинку, задайте уровень
+    контраста и получите результат вместе с графиками распределения цветов.</p>
+<a class="btn btn-primary" href="{{ url_for('contrast') }}">Перейти к обработке</a>
+{% endblock %}

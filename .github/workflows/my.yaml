@@ -1,0 +1,27 @@
+# имя, отображаемое в интерфейсе GitHub Actions
+name: 'test my project'
+on: [push]   # запускать проверку на каждый push
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Begin
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pipenv
+        run: python -m pip install pipenv
+      - name: Pipenvsync
+        run: pipenv sync
+      - name: Start tests
+        run: pipenv run python -m pytest -v my_tests.py
+      - name: Start gunicorn and check it answers
+        run: |
+          pipenv run gunicorn --bind 127.0.0.1:5000 wsgi:app & APP_PID=$!
+          sleep 5
+          curl --fail http://127.0.0.1:5000/
+          curl --fail http://127.0.0.1:5000/contrast > /dev/null
+          kill -TERM $APP_PID
